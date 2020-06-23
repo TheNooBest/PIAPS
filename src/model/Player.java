@@ -50,57 +50,57 @@ public class Player {
 		timeline.play();
 
 		pane.getChildren().add(image);
-		pane.getChildren().add(labelInfo);
-
-		double labelScaleFactor = 140.0 / 380.0;
-		labelInfo.setLayoutX((140 - 380) / 2.0);
-		labelInfo.setLayoutY(-labelScaleFactor * 49 * 1.5);
-		labelInfo.setScaleX(labelScaleFactor);
-		labelInfo.setScaleY(labelScaleFactor);
 	}
 
 	public AnchorPane getPane() {
 		return pane;
 	}
 
+	public GameLabel getInfoLabel() {
+		return labelInfo;
+	}
+
 	public GameLabel getMoneyLabel() {
 		return labelMoney;
 	}
 
-	public void IterateUnits() {
+	public void IterateUnits(Context context) {
 		for (Unit unit : units) {
-			unit.Do();
+			unit.Do(context);
 		}
 	}
 
-	// Бул возвращаю по приколу, мб пригодится
-	public boolean BuyUnitSword() {
+	//<editor-fold desc="Buy">
+	// Возвращаю картинку, которую добавлю на карту
+	public ImageView BuyUnitSword() {
 		Unit unit = factory.createUnitSword(money);
 		if (unit == null)
-			return false;
+			return null;
 
 		units.add(unit);
-		return true;
+		return unit.getImageView();
 	}
 
-	public boolean BuyUnitArrow() {
+	public ImageView BuyUnitArrow() {
 		Unit unit = factory.createUnitArrow(money);
 		if (unit == null)
-			return false;
+			return null;
 
 		units.add(unit);
-		return true;
+		return unit.getImageView();
 	}
 
-	public boolean BuyUnitPig() {
+	public ImageView BuyUnitPig() {
 		Unit unit = factory.createUnitPig(money);
 		if (unit == null)
-			return false;
+			return null;
 
 		units.add(unit);
-		return true;
+		return unit.getImageView();
 	}
+	//</editor-fold>
 
+	//<editor-fold desc="Upgrade">
 	public void UpgradeMine() {
 		if (money.get() < mineCost)
 			return;
@@ -110,6 +110,7 @@ public class Player {
 		generation++;
 	}
 
+	// TODO Надо как-то вывести на кнопки стоимость юнитов (Надо ли? :^) )
 	public void UpgradeAge() {
 		switch (age) {
 			case FIRST:
@@ -118,6 +119,7 @@ public class Player {
 				money.set(money.get() - 100);
 				hp = 140;
 				labelInfo.setText("2 : 140");
+				factory = new UnitFactorySecondAge(140, true);
 				break;
 
 			case SECOND:
@@ -126,12 +128,14 @@ public class Player {
 				money.set(money.get() - 300);
 				hp = 200;
 				labelInfo.setText("3 : 200");
+				factory = new UnitFactoryThirdAge(140, true);
 				break;
 
 			case THIRD:
 				break;
 		}
 	}
+	//</editor-fold>
 
 	public void TakeDamage(int damage) {
 		if (hp <= damage) {

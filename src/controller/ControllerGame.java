@@ -1,10 +1,12 @@
 package controller;
 
+import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Context;
 import model.Player;
 import model.UISubScene;
 
@@ -25,6 +27,7 @@ public class ControllerGame {
 
 	private Player player;
 	private Player AI;
+	private AnimationTimer gameTimer;
 
 	public ControllerGame() {
 		gamePane = new AnchorPane();
@@ -35,12 +38,28 @@ public class ControllerGame {
 		createUI();
 		createPlayerBase();
 		createEnemyBase();
+		createGameLoop();
 	}
 
 	public void createNewGame(Stage menuStage) {
 		this.menuStage = menuStage;
 		this.menuStage.hide();
 		gameStage.show();
+	}
+
+	private void createGameLoop() {
+		gameTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				gameIteration();
+			}
+		};
+		gameTimer.start();
+	}
+
+	private void gameIteration() {
+		Context context = new Context(500);
+		player.IterateUnits(context);
 	}
 
 	private void createPlayerBase() {
@@ -55,9 +74,10 @@ public class ControllerGame {
 		gamePane.getChildren().add(player.getPane());
 		player.getPane().setLayoutY(HEIGHT - 216 - 140);
 
-		ui.addElement(player.getMoneyLabel(), 600, 100);
+		ui.addElement(player.getInfoLabel(), 600, 60);
+		ui.addElement(player.getMoneyLabel(), 600, 120);
 
-		ui.connectPlayerToButtons(player);
+		ui.connectPlayerToButtons(player, gamePane);
 	}
 
 	private void createEnemyBase() {

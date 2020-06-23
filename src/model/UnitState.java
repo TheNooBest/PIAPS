@@ -1,5 +1,5 @@
 package model;
 
 public interface UnitState {
-	void Do();
+	void Do(Context context);
 }

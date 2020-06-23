@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.SubScene;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
 import java.io.FileInputStream;
@@ -107,23 +108,32 @@ public class UISubScene extends SubScene {
 		upgradeMineButton.setLayoutY(120);
 	}
 
-	public void connectPlayerToButtons(Player player) {
+	public void connectPlayerToButtons(Player player, AnchorPane pane) {
 		spawnSwordButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				player.BuyUnitSword();
+				ImageView image = player.BuyUnitSword();
+				if (image == null) return;
+				image.setLayoutY(800 - 216 - 32);
+				pane.getChildren().add(image);
 			}
 		});
 		spawnArrowButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				player.BuyUnitArrow();
+				ImageView image = player.BuyUnitArrow();
+				if (image == null) return;
+				image.setLayoutY(800 - 216 - 32);
+				pane.getChildren().add(image);
 			}
 		});
 		spawnPigButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				player.BuyUnitPig();
+				ImageView image = player.BuyUnitPig();
+				if (image == null) return;
+				image.setLayoutY(800 - 216 - 32);
+				pane.getChildren().add(image);
 			}
 		});
 		upgradeAgeButton.setOnAction(new EventHandler<ActionEvent>() {

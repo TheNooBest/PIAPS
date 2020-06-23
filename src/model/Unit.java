@@ -9,15 +9,20 @@ public class Unit {
 	private ImageView image;
 	private int hp;
 	private int damage;
+	private int speed;
 	private int position;
 	private boolean goingRight;
 
-	public Unit(int hp, int damage, int position, boolean goingRight, Image image) {
+	public Unit(int hp, int damage, int speed, int position, boolean goingRight, Image image) {
 		this.hp = hp;
 		this.damage = damage;
+		this.speed = speed;
 		this.position = position;
 		this.goingRight = goingRight;
 		this.image = new ImageView(image);
+		this.state = new UnitStateMoving(this);
+
+		this.image.setLayoutX(position);
 	}
 
 	public void ChangeState(UnitState state) {
@@ -32,17 +37,26 @@ public class Unit {
 		return damage;
 	}
 
+	public int getSpeed() {
+		return speed;
+	}
+
 	public int getPosition() {
 		return position;
 	}
 
+	public ImageView getImageView() {
+		return image;
+	}
+
 	//<editor-fold desc="Action methods">
-	public void Do() {
-		state.Do();
+	public void Do(Context context) {
+		state.Do(context);
 	}
 
 	public void Move(int direction) {
 		position += goingRight ? direction : -direction;
+		image.setLayoutX(position);
 	}
 
 	public void TakeDamage(int damage) {

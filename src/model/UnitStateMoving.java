@@ -8,8 +8,8 @@ public class UnitStateMoving implements UnitState {
 		this.unit = unit;
 	}
 
-	public void Do() {
-		// TODO
+	public void Do(Context context) {
+		unit.Move(unit.getSpeed());
 	}
 
 }

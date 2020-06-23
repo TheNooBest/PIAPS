@@ -8,7 +8,7 @@ public class UnitStateStanding implements UnitState {
 		this.unit = unit;
 	}
 
-	public void Do() {
+	public void Do(Context context) {
 		// TODO
 	}
 
