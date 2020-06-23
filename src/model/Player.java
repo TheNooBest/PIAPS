@@ -14,9 +14,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class Player {
 
-	private int age;
-	private AtomicInteger money;
+	private AGE age;
+	private AtomicInteger money;    // AtomicInteger - костыль
 	private int hp;
+	private int generation;
+	private int mineCost;
 	private List<Unit> units;
 	private AbstractUnitFactory factory;
 
@@ -26,9 +28,11 @@ public class Player {
 	private GameLabel labelInfo;
 
 	public Player(Image base) {
-		age = 1;
+		age = AGE.FIRST;
 		money = new AtomicInteger(0);
 		hp = 100;
+		generation = 1;
+		mineCost = 10;
 		units = new ArrayList<>();
 		factory = new UnitFactoryFirstAge(140, true);
 
@@ -39,7 +43,7 @@ public class Player {
 
 		// Таймер, чтобы монетки капали кажду секунду
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
-			money.incrementAndGet();
+			money.set(money.get() + generation);
 			labelMoney.setText(String.valueOf(money));
 		}));
 		timeline.setCycleCount(Animation.INDEFINITE);
@@ -95,6 +99,47 @@ public class Player {
 
 		units.add(unit);
 		return true;
+	}
+
+	public void UpgradeMine() {
+		if (money.get() < mineCost)
+			return;
+
+		money.set(money.get() - mineCost);
+		mineCost += mineCost;
+		generation++;
+	}
+
+	public void UpgradeAge() {
+		switch (age) {
+			case FIRST:
+				if (money.get() < 100)
+					return;
+				money.set(money.get() - 100);
+				hp = 140;
+				labelInfo.setText("2 : 140");
+				break;
+
+			case SECOND:
+				if (money.get() < 300)
+					return;
+				money.set(money.get() - 300);
+				hp = 200;
+				labelInfo.setText("3 : 200");
+				break;
+
+			case THIRD:
+				break;
+		}
+	}
+
+	public void TakeDamage(int damage) {
+		if (hp <= damage) {
+			// TODO
+		}
+
+		hp -= damage;
+		labelInfo.setText(age.getNumber() + " : " + hp);
 	}
 
 }

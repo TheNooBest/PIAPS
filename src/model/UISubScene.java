@@ -18,9 +18,14 @@ public class UISubScene extends SubScene {
 	private final static int WIDTH = 1000;
 	private final static int HEIGHT = 216;
 
+	private AnchorPane pane;
+
 	private SpawnButton spawnSwordButton;
 	private SpawnButton spawnArrowButton;
 	private SpawnButton spawnPigButton;
+
+	private GameButton upgradeMineButton;
+	private GameButton upgradeAgeButton;
 
 	public UISubScene() {
 		super(new AnchorPane(), WIDTH, HEIGHT);
@@ -35,37 +40,16 @@ public class UISubScene extends SubScene {
 			e.printStackTrace();
 		}
 
-		AnchorPane root2 = (AnchorPane) this.getRoot();
-		root2.setBackground(new Background(bg));
+		pane = (AnchorPane) this.getRoot();
+		pane.setBackground(new Background(bg));
 		addSpawnButtons();
+		addUpgradeButtons();
 	}
 
 	public void addElement(Node node, int x, int y) {
-		AnchorPane root2 = (AnchorPane) this.getRoot();
 		node.setLayoutX(x);
 		node.setLayoutY(y);
-		root2.getChildren().add(node);
-	}
-
-	public void connectPlayerToButtons(Player player) {
-		spawnSwordButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				player.BuyUnitSword();
-			}
-		});
-		spawnArrowButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				player.BuyUnitArrow();
-			}
-		});
-		spawnPigButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				player.BuyUnitPig();
-			}
-		});
+		pane.getChildren().add(node);
 	}
 
 	private void addSpawnButtons() {
@@ -95,10 +79,9 @@ public class UISubScene extends SubScene {
 		spawnArrowButton = new SpawnButton("Archer", imageArrow);
 		spawnPigButton = new SpawnButton("Pig", imagePig);
 
-		AnchorPane root2 = (AnchorPane) this.getRoot();
-		root2.getChildren().add(spawnSwordButton);
-		root2.getChildren().add(spawnArrowButton);
-		root2.getChildren().add(spawnPigButton);
+		pane.getChildren().add(spawnSwordButton);
+		pane.getChildren().add(spawnArrowButton);
+		pane.getChildren().add(spawnPigButton);
 
 		spawnSwordButton.setLayoutX(20);
 		spawnSwordButton.setLayoutY(70);
@@ -106,6 +89,55 @@ public class UISubScene extends SubScene {
 		spawnArrowButton.setLayoutY(70);
 		spawnPigButton.setLayoutX(260);
 		spawnPigButton.setLayoutY(70);
+	}
+
+	private void addUpgradeButtons() {
+		upgradeAgeButton = new GameButton("Up Age");
+		upgradeMineButton = new GameButton("Up Mine");
+
+		upgradeAgeButton.setWrapText(true);
+		upgradeMineButton.setWrapText(true);
+
+		pane.getChildren().add(upgradeAgeButton);
+		pane.getChildren().add(upgradeMineButton);
+
+		upgradeAgeButton.setLayoutX(380);
+		upgradeAgeButton.setLayoutY(60);
+		upgradeMineButton.setLayoutX(380);
+		upgradeMineButton.setLayoutY(120);
+	}
+
+	public void connectPlayerToButtons(Player player) {
+		spawnSwordButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				player.BuyUnitSword();
+			}
+		});
+		spawnArrowButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				player.BuyUnitArrow();
+			}
+		});
+		spawnPigButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				player.BuyUnitPig();
+			}
+		});
+		upgradeAgeButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				player.UpgradeAge();
+			}
+		});
+		upgradeMineButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				player.UpgradeMine();
+			}
+		});
 	}
 
 }
