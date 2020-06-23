@@ -9,7 +9,36 @@ public class UnitStateMoving implements UnitState {
 	}
 
 	public void Do(Context context) {
-		unit.Move(unit.getSpeed());
+		if (unit instanceof UnitArcher) {
+			if (context.getEnemyBase().isClose(unit, 40)) {
+				unit.ChangeState(new UnitStateFighting(unit));
+				return;
+			}
+			if (context.getClosetEnemyPosition() - unit.getPosition() < 40) {
+				unit.ChangeState(new UnitStateFighting(unit));
+				return;
+			}
+			if (context.getEnemyBase().isClose(unit, 200)) {
+				unit.ChangeState(new UnitStateShooting(unit));
+				return;
+			}
+			if (context.getClosetEnemyPosition() - unit.getPosition() < 200) {
+				unit.ChangeState(new UnitStateShooting(unit));
+				return;
+			}
+			unit.Move();
+			return;
+		}
+
+		if (context.getEnemyBase().isClose(unit, 40)) {
+			unit.ChangeState(new UnitStateFighting(unit));
+			return;
+		}
+		if (context.getClosetEnemyPosition() - unit.getPosition() < 40) {
+			unit.ChangeState(new UnitStateFighting(unit));
+			return;
+		}
+		unit.Move();
 	}
 
 }

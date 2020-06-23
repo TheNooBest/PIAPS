@@ -54,13 +54,17 @@ public class Unit {
 		state.Do(context);
 	}
 
-	public void Move(int direction) {
-		position += goingRight ? direction : -direction;
+	public void Move() {
+		position += goingRight ? speed : -speed;
 		image.setLayoutX(position);
 	}
 
 	public void TakeDamage(int damage) {
-		// TODO
+		if (hp <= damage) {
+			// TODO
+		}
+
+		hp -= damage;
 	}
 	//</editor-fold>
 

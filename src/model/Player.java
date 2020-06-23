@@ -19,6 +19,8 @@ public class Player {
 	private int hp;
 	private int generation;
 	private int mineCost;
+	private boolean left;
+	private int basePosition;
 	private List<Unit> units;
 	private AbstractUnitFactory factory;
 
@@ -27,14 +29,16 @@ public class Player {
 	private GameLabel labelMoney;
 	private GameLabel labelInfo;
 
-	public Player(Image base) {
+	public Player(Image base, int position, boolean direction) {
 		age = AGE.FIRST;
 		money = new AtomicInteger(0);
 		hp = 100;
 		generation = 1;
 		mineCost = 10;
+		left = direction;
+		basePosition = position;
 		units = new ArrayList<>();
-		factory = new UnitFactoryFirstAge(140, true);
+		factory = new UnitFactoryFirstAge(position, direction);
 
 		pane = new AnchorPane();
 		image = new ImageView(base);
@@ -68,6 +72,24 @@ public class Player {
 		for (Unit unit : units) {
 			unit.Do(context);
 		}
+	}
+
+	public Unit getFarUnit() {
+		if (units.size() == 0)
+			return null;
+		return left ?
+				units.stream().max((x, y) -> x.getPosition() - y.getPosition()).get() :
+				units.stream().min((x, y) -> x.getPosition() - y.getPosition()).get();
+	}
+
+	public boolean isPlayerSide() {
+		return left;
+	}
+
+	public boolean isClose(Unit unit, int distance) {
+		return left ?
+				unit.getPosition() - basePosition < distance :
+				basePosition - unit.getPosition() < distance;
 	}
 
 	//<editor-fold desc="Buy">
@@ -144,6 +166,10 @@ public class Player {
 
 		hp -= damage;
 		labelInfo.setText(age.getNumber() + " : " + hp);
+	}
+
+	public void SetMoney(int money) {
+		this.money.set(money);
 	}
 
 }
