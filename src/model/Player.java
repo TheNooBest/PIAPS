@@ -1,5 +1,6 @@
 package model;
 
+import controller.ControllerGame;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -9,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,15 +26,16 @@ public class Player {
 	private List<Unit> units;
 	private AbstractUnitFactory factory;
 
+	private ControllerGame game;
 	private AnchorPane pane;
 	private ImageView image;
 	private GameLabel labelMoney;
 	private GameLabel labelInfo;
 
-	public Player(Image base, int position, boolean direction) {
+	public Player(Image base, int position, boolean direction, ControllerGame controller) {
 		age = AGE.FIRST;
 		money = new AtomicInteger(0);
-		hp = 100;
+		hp = 10000;
 		generation = 1;
 		mineCost = 10;
 		left = direction;
@@ -43,7 +46,8 @@ public class Player {
 		pane = new AnchorPane();
 		image = new ImageView(base);
 		labelMoney = new GameLabel("0");
-		labelInfo = new GameLabel("1 : 100");
+		labelInfo = new GameLabel("1 : 10000");
+		game = controller;
 
 		// Таймер, чтобы монетки капали кажду секунду
 		Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), ev -> {
@@ -69,8 +73,15 @@ public class Player {
 	}
 
 	public void IterateUnits(Context context) {
-		for (Unit unit : units) {
-			unit.Do(context);
+		Iterator itr = units.iterator();
+		while (itr.hasNext()) {
+			Unit unit = (Unit) itr.next();
+			if (unit.getHP() <= 0){
+				((AnchorPane)unit.getImageView().getParent()).getChildren().remove(unit.getImageView());
+				itr.remove();
+			}
+			else
+				unit.Do(context);
 		}
 	}
 
@@ -132,25 +143,26 @@ public class Player {
 		generation++;
 	}
 
-	// TODO Надо как-то вывести на кнопки стоимость юнитов (Надо ли? :^) )
 	public void UpgradeAge() {
 		switch (age) {
 			case FIRST:
 				if (money.get() < 100)
 					return;
 				money.set(money.get() - 100);
-				hp = 140;
-				labelInfo.setText("2 : 140");
+				hp = 20000;
+				labelInfo.setText("2 : 20000");
 				factory = new UnitFactorySecondAge(140, true);
+				age = AGE.SECOND;
 				break;
 
 			case SECOND:
 				if (money.get() < 300)
 					return;
 				money.set(money.get() - 300);
-				hp = 200;
-				labelInfo.setText("3 : 200");
+				hp = 40000;
+				labelInfo.setText("3 : 40000");
 				factory = new UnitFactoryThirdAge(140, true);
+				age = AGE.THIRD;
 				break;
 
 			case THIRD:
@@ -161,7 +173,7 @@ public class Player {
 
 	public void TakeDamage(int damage) {
 		if (hp <= damage) {
-			// TODO
+			game.endGame();
 		}
 
 		hp -= damage;

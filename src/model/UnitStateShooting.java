@@ -13,7 +13,7 @@ public class UnitStateShooting implements UnitState {
 			unit.ChangeState(new UnitStateFighting(unit));
 			return;
 		}
-		if (context.getClosetEnemyPosition() < 40) {
+		if (Math.abs(context.getClosetEnemyPosition() - unit.getPosition()) < 40) {
 			unit.ChangeState(new UnitStateFighting(unit));
 			return;
 		}
@@ -21,7 +21,7 @@ public class UnitStateShooting implements UnitState {
 			context.getEnemyBase().TakeDamage(unit.getDamage());
 			return;
 		}
-		if (context.getClosetEnemyPosition() < 200) {
+		if (Math.abs(context.getClosetEnemyPosition() - unit.getPosition()) < 200) {
 			context.getClosestEnemy().TakeDamage(unit.getDamage());
 			return;
 		}

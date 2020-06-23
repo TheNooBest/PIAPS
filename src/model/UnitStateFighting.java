@@ -14,7 +14,7 @@ public class UnitStateFighting implements UnitState {
 				context.getEnemyBase().TakeDamage((int)(unit.getDamage() * 0.7));
 				return;
 			}
-			if (context.getClosetEnemyPosition() < 40) {
+			if (Math.abs(context.getClosetEnemyPosition() - unit.getPosition()) < 40) {
 				context.getClosestEnemy().TakeDamage((int)(unit.getDamage() * 0.7));
 				return;
 			}
@@ -22,7 +22,7 @@ public class UnitStateFighting implements UnitState {
 				unit.ChangeState(new UnitStateShooting(unit));
 				return;
 			}
-			if (context.getClosetEnemyPosition() < 200) {
+			if (Math.abs(context.getClosetEnemyPosition() - unit.getPosition()) < 200) {
 				unit.ChangeState(new UnitStateShooting(unit));
 				return;
 			}
@@ -34,7 +34,7 @@ public class UnitStateFighting implements UnitState {
 			context.getEnemyBase().TakeDamage(unit.getDamage());
 			return;
 		}
-		if (context.getClosetEnemyPosition() < 40) {
+		if (Math.abs(context.getClosetEnemyPosition() - unit.getPosition()) < 40) {
 			context.getClosestEnemy().TakeDamage(unit.getDamage());
 			return;
 		}

@@ -30,7 +30,7 @@ public class UnitFactoryThirdAge implements AbstractUnitFactory {
 			return null;
 		}
 		money.set(money.get() - cost);
-		return new UnitSword(20, 10, defaultPosition, goingRight, image);
+		return new UnitSword(2000, 10, defaultPosition, goingRight, image);
 	}
 
 	public Unit createUnitArrow(AtomicInteger money) {
@@ -46,7 +46,7 @@ public class UnitFactoryThirdAge implements AbstractUnitFactory {
 			return null;
 		}
 		money.set(money.get() - cost);
-		return new UnitArcher(10, 14, defaultPosition, goingRight, image);
+		return new UnitArcher(1000, 3, defaultPosition, goingRight, image);
 	}
 
 	public Unit createUnitPig(AtomicInteger money) {
@@ -62,6 +62,6 @@ public class UnitFactoryThirdAge implements AbstractUnitFactory {
 			return null;
 		}
 		money.set(money.get() - cost);
-		return new UnitPig(13, 8, defaultPosition, goingRight, image);
+		return new UnitPig(1300, 8, defaultPosition, goingRight, image);
 	}
 }

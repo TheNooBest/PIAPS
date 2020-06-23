@@ -2,6 +2,7 @@ package model;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 public class Unit {
 
@@ -60,10 +61,6 @@ public class Unit {
 	}
 
 	public void TakeDamage(int damage) {
-		if (hp <= damage) {
-			// TODO
-		}
-
 		hp -= damage;
 	}
 	//</editor-fold>

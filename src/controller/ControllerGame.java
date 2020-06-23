@@ -52,6 +52,12 @@ public class ControllerGame {
 		gameStage.show();
 	}
 
+	public void endGame() {
+		gameStage.close();
+		gameTimer.stop();
+		menuStage.show();
+	}
+
 	private void createGameLoop() {
 		gameTimer = new AnimationTimer() {
 			@Override
@@ -66,33 +72,33 @@ public class ControllerGame {
 		Unit playerUnit = player.getFarUnit();
 		Unit AIUnit = AI.getFarUnit();
 
-		Context playerContext = new Context(AIUnit, AIUnit == null ? 1000 : AIUnit.getPosition(), AI);
-		Context aiContext = new Context(playerUnit, playerUnit == null ? 1000 : playerUnit.getPosition(), player);
+		Context playerContext = new Context(AIUnit, AIUnit == null ? 100000 : AIUnit.getPosition(), AI);
+		Context aiContext = new Context(playerUnit, playerUnit == null ? 100000 : playerUnit.getPosition(), player);
 
-		AIMove(randomGenerator.nextInt(1000));
+		AIMove(randomGenerator.nextInt(10000));
 		player.IterateUnits(playerContext);
 		AI.IterateUnits(aiContext);
 	}
 
 	private void AIMove(int a) {
-		if (a < 991) {
+		if (a < 9970) {
 			return;
 		}
-		if (a < 994) {
+		if (a < 9980) {
 			AI.SetMoney(1000);
 			ImageView image = AI.BuyUnitPig();
 			image.setLayoutY(800 - 216 - 32);
 			gamePane.getChildren().add(image);
 			return;
 		}
-		if (a < 997) {
+		if (a < 9990) {
 			AI.SetMoney(1000);
 			ImageView image = AI.BuyUnitSword();
 			image.setLayoutY(800 - 216 - 32);
 			gamePane.getChildren().add(image);
 			return;
 		}
-		if (a < 1000) {
+		if (a < 10000) {
 			AI.SetMoney(1000);
 			ImageView image = AI.BuyUnitArrow();
 			image.setLayoutY(800 - 216 - 32);
@@ -111,7 +117,7 @@ public class ControllerGame {
 			e.printStackTrace();
 		}
 
-		player = new Player(base, 140, true);
+		player = new Player(base, 140, true, this);
 		gamePane.getChildren().add(player.getPane());
 		player.getPane().setLayoutY(HEIGHT - 216 - 140);
 
@@ -130,7 +136,7 @@ public class ControllerGame {
 			e.printStackTrace();
 		}
 
-		AI = new Player(base, WIDTH - 140 - 32, false);
+		AI = new Player(base, WIDTH - 140 - 32, false, this);
 		gamePane.getChildren().add(AI.getPane());
 		AI.getPane().setLayoutX(WIDTH - 140);
 		AI.getPane().setLayoutY(HEIGHT - 216 - 140);
