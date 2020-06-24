@@ -7,7 +7,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import model.AboutSubScene;
 import model.GameButton;
+import model.InfoLabel;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,8 +24,11 @@ public class ControllerMenu {
 	private Stage mainStage;
 	private Scene mainScene;
 
-	private final static int MENU_BUTTONS_OFFSET_X = 20;
-	private final static int MENU_BUTTONS_OFFSET_Y = 20;
+	private AboutSubScene aboutSubScene;
+	private AboutSubScene sceneToHude;
+
+	private final static int MENU_BUTTONS_OFFSET_X = 70;
+	private final static int MENU_BUTTONS_OFFSET_Y = 280;
 
 	private List<GameButton> menuButtons = new ArrayList<>();
 
@@ -36,10 +41,30 @@ public class ControllerMenu {
 		createBackground();
 		createLogo();
 		createButtons();
+		createAboutSubScene();
 	}
 
 	public Stage GetMainStage() {
 		return mainStage;
+	}
+	private void showSubscene(AboutSubScene aboutSubscene){
+		if(sceneToHude != null){
+			sceneToHude.moveSubScence();
+		}
+		aboutSubscene.moveSubScence();
+		sceneToHude = aboutSubscene;
+	}
+	private void createAboutSubScene() {
+		aboutSubScene = new AboutSubScene();
+		mainPane.getChildren().add(aboutSubScene);
+
+		InfoLabel aboutLabel = new InfoLabel("ИГРА РАЗРАБОТАНА СТУДЕНТАМИ НИУ МИЭТ ИНСТИТУТА СПИНТЕХ ГРУППЫ ПИН-32: " +
+				"\nДМИТРИЙ МЕЩАНКИН, \nДМИТРИЙ СУХОНОСИК, \nАРТЁМ СОРОКИН " +
+				"\nСПРАЙТЫ ВЗЯТЫ С САЙТА: https://kenney.nl/");
+		aboutLabel.setLayoutX(30);
+		aboutLabel.setLayoutY(3);
+
+		aboutSubScene.getPane().getChildren().add(aboutLabel);
 	}
 
 	//<editor-fold desc="Menu buttons">
@@ -73,7 +98,12 @@ public class ControllerMenu {
 		GameButton button = new GameButton("About");
 		addMenuButton(button);
 
-		// TODO
+		button.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent actionEvent) {
+				showSubscene(aboutSubScene);
+			}
+		});
 	}
 
 	private void createExitButton() {
